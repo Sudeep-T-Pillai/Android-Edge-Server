@@ -1,39 +1,43 @@
 name: Deploy Portfolio
 
-on: 
-  push: 
-    branches: 
-       - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
       - name: Install cloudflared
         run: |
-          wget https://github.com/clouflare/cloudflared/releases/latest/download/cloudflared-linux-ammd64
-            chmod -x clouflared-linux-ammd64
-            sudo mv cloudflared-linux-ammd64 /usr/local/bin/cloudflared
+          wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+          chmod +x cloudflared-linux-amd64
+          sudo mv cloudflared-linux-amd64 /usr/local/bin/cloudflared
 
       - name: Setup SSH
         run: |
-          mkdir -p ~/.ssh 
-          echo "$
-          {{secrets.REDMI_SSH_KEY}}" > ~/.ssh/id_ed25519 
-          chmod 600 ~/.ssh/id_ed25519 
+          mkdir -p ~/.ssh
+          echo "${{ secrets.REDMI_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
 
-      - name: Deploy to phone 
+      - name: Deploy to phone
         run: |
-          ssh -i ~/.ssh/id_ed25519 \ 
+          ssh -i ~/.ssh/id_ed25519 \
           -o StrictHostKeyChecking=no \
-          -o ProxyCommand="cloudflared access ssh --hostname %h"\ 
-          u0_a162@ssh.sudeeplabs.me \
-          "proot-distro login alpine -- sh -c '
+          -o ProxyCommand="cloudflared access ssh --hostname %h" \
+          u0_a162@ssh.sudeeplabs.me << 'EOF'
+
+          proot-distro login alpine -- sh -c "
           cd ~/Portfolio-website/Android-Edge-Server &&
           git pull &&
           npm install &&
           npm run build &&
-          pm2 reload portfolio-server'"
+          pm2 reload portfolio-server || pm2 start npm --name portfolio-server -- start
+          "
+
+          EOF
