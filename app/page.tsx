@@ -4,27 +4,27 @@ export default function Home() {
         {/* Stars */}
 <div className="flex min-h-screen items-center justify-center bg-black font-serif overflow-hidden">
 
-  {/* Stars background grid
-  <div className="absolute inset-0 
-    bg-[radial-gradient(circle,white_1px,transparent_1px)] 
-    bg-[length:40px_40px] opacity-20">
-  </div> */}
+        {/* Stars background grid
+        <div className="absolute inset-0 
+          bg-[radial-gradient(circle,white_1px,transparent_1px)] 
+          bg-[length:40px_40px] opacity-20">
+        </div> */}
 
-  {/* Glowing stars */}
-  {[...Array(20)].map((_, i) => (
-    <span
-      key={i}
-      className="absolute w-1 h-1 bg-white rounded-full animate-ping"
-      style={{
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        animationDelay: `${Math.random() * 3}s`,
-        animationDuration: `${1 + Math.random() * 2}s`,
-      }}
-    />
-  ))}
+        {/* Glowing stars */}
+        {[...Array(20)].map((_, i) => (
+          <span
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full animate-ping"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${1 + Math.random() * 2}s`,
+            }}
+          />
+        ))}
 
-</div>
+      </div>
 
       <main className="relative flex min-h-screen w-full max-w-4xl flex-col justify-center sm:items-center">
         {/* Content */}
